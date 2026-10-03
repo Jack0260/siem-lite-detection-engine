@@ -1,0 +1,29 @@
+title: Impossible Travel — Valid Accounts
+id: impossible_travel
+description: >
+  Detects successful authentications from two geographically distant locations
+  within a time window that makes legitimate travel impossible. This may indicate
+  credential theft, session hijacking, or use of stolen valid accounts from a
+  new location.
+logType: auth
+severity: critical
+mitre:
+  tactic: Defense Evasion
+  technique: Valid Accounts
+  techniqueId: T1078
+detection:
+  matchers:
+    - field: action
+      value: login_success
+      type: equals
+  groupBy: username
+  minDistanceKm: 500
+  maxTimeMinutes: 60
+falsePositives:
+  - Users with VPN connections that route through distant exit nodes
+  - Users who use remote desktop or SSH tunneling from mobile devices
+  - Corporate proxies that NAT traffic through a central data center
+tags:
+  - attack.defense_evasion
+  - attack.t1078
+  - attack.persistence

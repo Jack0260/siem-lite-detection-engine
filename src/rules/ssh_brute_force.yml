@@ -1,0 +1,28 @@
+title: SSH Brute Force Detection
+id: ssh_brute_force
+description: >
+  Detects multiple failed SSH login attempts from a single source IP address
+  within a short time window. This pattern is characteristic of brute-force
+  password guessing attacks against SSH services.
+logType: auth
+severity: high
+mitre:
+  tactic: Credential Access
+  technique: Brute Force
+  techniqueId: T1110
+detection:
+  matchers:
+    - field: action
+      value: login_failed
+      type: equals
+  threshold: 5
+  timeframeMinutes: 10
+  groupBy: sourceIp
+falsePositives:
+  - Legitimate users who repeatedly mistype their password
+  - Automated monitoring systems that check SSH availability
+  - Load balancers performing health checks
+tags:
+  - attack.credential_access
+  - attack.t1110
+  - attack.initial_access

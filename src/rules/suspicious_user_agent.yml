@@ -1,0 +1,26 @@
+title: Suspicious User-Agent Detection
+id: suspicious_user_agent
+description: >
+  Detects HTTP requests with suspicious or known-malicious user-agent strings,
+  including automated scanners, command-line tools, empty user-agents, and
+  known exploit frameworks. These user-agents are rarely seen in legitimate
+  browsing traffic and often indicate reconnaissance or exploitation attempts.
+logType: web
+severity: medium
+mitre:
+  tactic: Reconnaissance
+  technique: Active Scanning
+  techniqueId: T1595
+detection:
+  matchers:
+    - field: userAgent
+      type: regex
+      value: (?i)(curl|python-requests|nikto|sqlmap|nmap|masscan|wpscan|dirb|gobuster|hydra|metasploit|burp|acunetix|nessus|openvas|zgrab|semrush|MJ12bot|empty|^$|^-$)
+falsePositives:
+  - Legitimate API clients using curl or python-requests for integration
+  - Security scanners run by authorized penetration testers
+  - Monitoring tools that identify themselves honestly
+tags:
+  - attack.reconnaissance
+  - attack.t1595
+  - attack.initial_access
